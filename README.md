@@ -32,11 +32,13 @@ Select elements by role, text, labels or structure.
 
 ### Deploying
 
+The committed dependency is the tagged git version (works on Vercel). For live development against a local `club-store`, temporarily use `"club-store": "file:../club-store"` and run `npm install`. Committed value:
+
 ```json
-"club-store": "github:<org>/club-store#v0.1.0"
+"club-store": "git+https://github.com/mikeMaya08/club-store.git#v0.1.0"
 ```
 
-Create a Netlify site from this repo (`netlify.toml`; output goes to `dist/coach`) and point `club-shell`'s `_redirects` at it.
+Deploy as its own **Vercel** project from this repo (config in `vercel.json`; the build writes to `dist/coach` so the files match the `/coach/` base path, and a rewrite gives deep links the SPA fallback). Name the project `club-coach` so `club-shell` can proxy `/coach/*` to `https://club-coach.vercel.app`. If the `club-store` repo is private, Vercel needs access to it (or switch to a public repo).
 
 ## Test hooks
 
