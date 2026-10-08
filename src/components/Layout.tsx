@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { logout, useClub } from 'club-store'
 import { useMe } from '../lib/useMe'
+import PendingBar from './PendingBar'
 import NotificationBell from './NotificationBell'
 import { useToast } from './Toast'
 
@@ -35,6 +36,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen">
+      <PendingBar />
       <header className="bg-indigo-700 text-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <div className="text-lg font-semibold">
