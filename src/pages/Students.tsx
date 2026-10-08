@@ -27,7 +27,7 @@ export default function Students() {
     <div>
       <h2 className="mb-1 text-xl font-semibold">Students</h2>
       <p className="mb-4 text-sm text-slate-500">Players who attended at least one of your lessons.</p>
-      {rows.length === 0 && <div className="rounded-lg border bg-white p-6 text-center text-sm text-slate-400">No students yet. Mark attendance in a lesson to see them here.</div>}
+      {rows.length === 0 && <div className="rounded-lg border bg-white p-6 text-center text-sm text-slate-500">No students yet. Mark attendance in a lesson to see them here.</div>}
       <div className="space-y-2">
         {rows.map((r) => (
           <div key={r.user.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-white p-3">
@@ -40,8 +40,8 @@ export default function Students() {
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                {r.rating ? <Rating value={r.rating} /> : <span className="text-xs text-slate-400">Not rated</span>}
-                {r.ratedOn && <div className="text-[11px] text-slate-400">{format(parseISO(r.ratedOn), 'MMM d')}</div>}
+                {r.rating ? <Rating value={r.rating} /> : <span className="text-xs text-slate-500">Not rated</span>}
+                {r.ratedOn && <div className="text-[11px] text-slate-500">{format(parseISO(r.ratedOn), 'MMM d')}</div>}
               </div>
               <Link to={`/notes?student=${r.user.id}`} className="text-sm text-indigo-700 underline">Add note</Link>
             </div>

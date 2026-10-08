@@ -16,6 +16,18 @@ Select elements by role, text, labels or structure.
 - **Students:** players who attended your lessons, with their last rating.
 - Hidden debug panel: **Ctrl+Shift+D**.
 
+## Added in the product upgrade
+
+- **Month view:** *Week / Month* switch on My schedule.
+- **Lesson templates:** save the Create-lesson form as a template, start a lesson from a template, delete templates. Lesson details also show the waitlist.
+
+## Dark mode and accessibility
+
+- **Dark mode:** toggle in the header (🌙/☀️). The choice is saved in `localStorage['club:theme']`, which all apps share, and defaults to the operating system preference. It is implemented by remapping the Tailwind utilities in `src/index.css` under a `.dark` class (no `dark:` variants on each element).
+- **Accessibility:** skip link, landmarks, visible focus ring, dialogs with `aria-labelledby`, focus moved into the dialog, kept inside it with Tab and restored on close. Audited with axe-core (WCAG 2 A/AA + best practices) on every page and dialog in light and dark themes: 0 violations at the time of writing.
+
+Still no `data-testid` anywhere in this app, on purpose.
+
 ## Scripts
 
 | Script          | What it does                                  |

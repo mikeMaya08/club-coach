@@ -4,6 +4,7 @@ import { logout, useClub } from 'club-store'
 import { useMe } from '../lib/useMe'
 import PendingBar from './PendingBar'
 import NotificationBell from './NotificationBell'
+import ThemeToggle from './ThemeToggle'
 import { useToast } from './Toast'
 
 const LINKS = [
@@ -36,17 +37,24 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen">
+      <a
+        href="#main"
+        className="sr-only rounded bg-white px-3 py-2 text-slate-900 focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[90]"
+      >
+        Skip to content
+      </a>
       <PendingBar />
       <header className="bg-indigo-700 text-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-3">
-          <div className="text-lg font-semibold">
-            Baseline Club <span className="font-normal opacity-80">· Coach</span>
-          </div>
+          <h1 className="text-lg font-semibold">
+            Baseline Club <span className="font-normal text-indigo-100">· Coach</span>
+          </h1>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-2 text-sm">
               <span className="inline-block h-6 w-6 rounded-full" style={{ background: me.avatarColor }} />
               {me.name}
             </span>
+            <ThemeToggle />
             <NotificationBell />
             <span
               role="button"
@@ -75,7 +83,7 @@ export default function Layout() {
           ))}
         </nav>
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-5">
+      <main id="main" tabIndex={-1} className="mx-auto max-w-5xl px-4 py-5 outline-none">
         <Outlet context={me} />
       </main>
     </div>
