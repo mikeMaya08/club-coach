@@ -45,7 +45,7 @@ export default function LessonDetail() {
   const editable = lesson.status !== 'cancelled'
   const mark = async (studentId: string, value: 'present' | 'no-show') => {
     const extra = value === 'no-show' && data.matching[studentId] > 0
-    const result = await run(() => api.setAttendance(lesson.id, studentId, value))
+    const result = await run(() => api.setAttendance(lesson.id, studentId, value, me.id))
     if (result.ok) toast(extra ? 'Marked as no-show (their reservation too)' : `Marked ${value}`, 'success')
   }
 
@@ -100,7 +100,7 @@ export default function LessonDetail() {
 
         {lesson.status === 'scheduled' && (
           <div className="mt-5 flex gap-2 border-t pt-4">
-            <button type="button" disabled={busy} className="rounded border px-3 py-2 text-sm" onClick={() => run(() => api.completeLesson(lesson.id), 'Lesson marked as done')}>Mark lesson as done</button>
+            <button type="button" disabled={busy} className="rounded border px-3 py-2 text-sm" onClick={() => run(() => api.completeLesson(lesson.id, me.id), 'Lesson marked as done')}>Mark lesson as done</button>
             <button type="button" className="rounded border border-red-300 px-3 py-2 text-sm text-red-700" onClick={() => setConfirming(true)}>Cancel lesson</button>
           </div>
         )}

@@ -12,6 +12,7 @@ const LINKS = [
   { to: '/lessons/new', label: 'Create lesson' },
   { to: '/notes', label: 'Student notes' },
   { to: '/students', label: 'Students' },
+  { to: '/activity', label: 'Activity' },
 ]
 
 export default function Layout() {
