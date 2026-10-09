@@ -16,6 +16,10 @@ Select elements by role, text, labels or structure.
 - **Students:** players who attended your lessons, with their last rating.
 - Hidden debug panel: **Ctrl+Shift+D**.
 
+## Activity log
+
+**Activity** lists what the coach did plus what happened in their lessons (students enrolling, leaving, joining the waitlist, attendance), with *All / My lessons / Notes and templates* filters. Attendance and *mark as done* now record the coach as the actor.
+
 ## Added in the product upgrade
 
 - **Month view:** *Week / Month* switch on My schedule.
