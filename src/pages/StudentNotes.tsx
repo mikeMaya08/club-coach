@@ -78,7 +78,7 @@ export default function StudentNotes() {
         <div>
           <span className="mb-1 block text-sm text-slate-600">Student</span>
           <Select
-            placeholder="Choose a student"
+            label="Student" placeholder="Choose a student"
             value={studentId}
             onChange={setStudentId}
             options={data.players.map((p) => ({ value: p.id, label: p.name, hint: `Level ${p.level}` }))}
@@ -100,11 +100,11 @@ export default function StudentNotes() {
       {studentId && (
         <div className="mt-6">
           <h3 className="mb-2 text-sm font-semibold uppercase text-slate-500">Previous notes</h3>
-          {data.notes.length === 0 && <p className="text-sm text-slate-400">No notes for this student yet.</p>}
+          {data.notes.length === 0 && <p className="text-sm text-slate-500">No notes for this student yet.</p>}
           {data.notes.map((n) => (
             <div key={n.id} className="mb-2 rounded-lg border bg-white p-3">
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-xs text-slate-400">{format(parseISO(n.createdAt), 'MMM d, yyyy HH:mm')}</span>
+                <span className="text-xs text-slate-500">{format(parseISO(n.createdAt), 'MMM d, yyyy HH:mm')}</span>
                 <Rating value={n.rating} />
               </div>
               <div className="text-sm [&_li]:ml-5 [&_ul]:list-disc" dangerouslySetInnerHTML={{ __html: n.text }} />

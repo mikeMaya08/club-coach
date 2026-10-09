@@ -15,6 +15,26 @@ export default function CreateLesson() {
   const [start, setStart] = useState('10:00')
   const [end, setEnd] = useState('11:00')
   const [capacity, setCapacity] = useState('4')
+  const [templateName, setTemplateName] = useState('')
+  const templates = useClub((s) => s.lessonTemplates.filter((x) => x.coachId === me.id))
+
+  const applyTemplate = (id: string) => {
+    const tpl = templates.find((x) => x.id === id)
+    if (!tpl) return
+    setTitle(tpl.title)
+    if (tpl.courtId) setCourtId(tpl.courtId)
+    setStart(tpl.start)
+    setEnd(tpl.end)
+    setCapacity(String(tpl.capacity))
+  }
+
+  const saveAsTemplate = async () => {
+    const result = await run(
+      () => api.saveTemplate({ coachId: me.id, name: templateName.trim(), title: title.trim(), courtId: courtId || undefined, start, end, capacity: Number(capacity) }),
+      'Template saved',
+    )
+    if (result.ok) setTemplateName('')
+  }
 
   // Live check while the form is being filled in.
   const check = useClub((s) => {
@@ -54,14 +74,25 @@ export default function CreateLesson() {
     <div className="max-w-xl">
       <h2 className="mb-4 text-xl font-semibold">Create lesson</h2>
       <form onSubmit={submit} className="space-y-4 rounded-lg border bg-white p-4">
+        {templates.length > 0 && (
+          <div>
+            <span className={label}>Start from a template</span>
+            <Select
+              label="Template" placeholder="Choose a template"
+              value=""
+              onChange={applyTemplate}
+              options={templates.map((x) => ({ value: x.id, label: x.name, hint: `${x.start}–${x.end} · ${x.capacity} seats` }))}
+            />
+          </div>
+        )}
         <div>
-          <span className={label}>Title</span>
-          <input className={field} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Serve clinic" />
+          <label htmlFor="lesson-title" className={label}>Title</label>
+          <input id="lesson-title" className={field} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Serve clinic" />
         </div>
         <div>
-          <span className={label}>Court</span>
+          <span id="court-label" className={label}>Court</span>
           <Select
-            placeholder="Choose a court"
+            label="Court" placeholder="Choose a court"
             value={courtId}
             onChange={setCourtId}
             options={check.courts.map((c) => ({ value: c.id, label: c.name, hint: `${c.surface}${c.lights ? '' : ' · no lights'}${c.active ? '' : ' · closed'}`, disabled: !c.active }))}
@@ -69,21 +100,21 @@ export default function CreateLesson() {
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <span className={label}>Date</span>
-            <input className={field} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <label htmlFor="lesson-date" className={label}>Date</label>
+            <input id="lesson-date" className={field} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
           <div>
-            <span className={label}>Start</span>
-            <input className={field} type="time" step={900} value={start} onChange={(e) => setStart(e.target.value)} />
+            <label htmlFor="lesson-start" className={label}>Start</label>
+            <input id="lesson-start" className={field} type="time" step={900} value={start} onChange={(e) => setStart(e.target.value)} />
           </div>
           <div>
-            <span className={label}>End</span>
-            <input className={field} type="time" step={900} value={end} onChange={(e) => setEnd(e.target.value)} />
+            <label htmlFor="lesson-end" className={label}>End</label>
+            <input id="lesson-end" className={field} type="time" step={900} value={end} onChange={(e) => setEnd(e.target.value)} />
           </div>
         </div>
         <div className="w-32">
-          <span className={label}>Capacity</span>
-          <input className={field} type="number" min={1} value={capacity} onChange={(e) => setCapacity(e.target.value)} />
+          <label htmlFor="lesson-capacity" className={label}>Capacity</label>
+          <input id="lesson-capacity" className={field} type="number" min={1} value={capacity} onChange={(e) => setCapacity(e.target.value)} />
         </div>
 
         {check.ready && (
@@ -103,6 +134,43 @@ export default function CreateLesson() {
           {busy ? 'Creating…' : 'Create lesson'}
         </button>
       </form>
+
+      <section className="mt-6 rounded-lg border bg-white p-4" aria-labelledby="templates-heading">
+        <h3 id="templates-heading" className="mb-2 text-sm font-semibold uppercase text-slate-500">Templates</h3>
+        <div className="flex flex-wrap items-end gap-2">
+          <div className="flex-1">
+            <label htmlFor="template-name" className={label}>Save the form above as a template</label>
+            <input id="template-name" className={field} value={templateName} onChange={(e) => setTemplateName(e.target.value)} placeholder="Template name" />
+          </div>
+          <button type="button" disabled={busy || !templateName.trim() || !title.trim()} className="rounded border px-3 py-2 text-sm disabled:opacity-50" onClick={saveAsTemplate}>
+            Save template
+          </button>
+        </div>
+        {templates.length === 0 ? (
+          <p className="mt-3 text-sm text-slate-500">No templates yet.</p>
+        ) : (
+          <ul className="mt-3 divide-y">
+            {templates.map((x) => (
+              <li key={x.id} className="flex items-center justify-between py-2 text-sm">
+                <span>
+                  <span className="font-medium">{x.name}</span>{' '}
+                  <span className="text-slate-500">{x.title} · {x.start}–{x.end} · {x.capacity} seats</span>
+                </span>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Delete template ${x.name}`}
+                  className="cursor-pointer text-red-700 underline"
+                  onClick={() => run(() => api.deleteTemplate(x.id, me.id), 'Template deleted')}
+                  onKeyDown={(e) => e.key === 'Enter' && run(() => api.deleteTemplate(x.id, me.id), 'Template deleted')}
+                >
+                  Delete
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   )
 }

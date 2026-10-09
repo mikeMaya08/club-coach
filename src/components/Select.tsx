@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
 export interface Option {
   value: string
@@ -8,9 +8,10 @@ export interface Option {
 }
 
 /** Hand-built dropdown (no native <select>), closes on outside click. */
-export default function Select({ options, value, onChange, placeholder }: { options: Option[]; value: string; onChange: (v: string) => void; placeholder: string }) {
+export default function Select({ options, value, onChange, placeholder, label }: { options: Option[]; value: string; onChange: (v: string) => void; placeholder: string; label: string }) {
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
+  const listId = useId()
   const current = options.find((o) => o.value === value)
 
   useEffect(() => {
@@ -24,16 +25,19 @@ export default function Select({ options, value, onChange, placeholder }: { opti
       <div
         tabIndex={0}
         role="combobox"
+        aria-label={label}
+        aria-haspopup="listbox"
+        aria-controls={listId}
         aria-expanded={open}
         className="flex w-full cursor-pointer items-center justify-between rounded border bg-white px-3 py-2 text-sm"
         onClick={() => setOpen((o) => !o)}
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), setOpen((o) => !o))}
       >
-        <span className={current ? '' : 'text-slate-400'}>{current ? current.label : placeholder}</span>
+        <span className={current ? '' : 'text-slate-500'}>{current ? current.label : placeholder}</span>
         <span aria-hidden>▾</span>
       </div>
       {open && (
-        <div role="listbox" className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded border bg-white shadow-lg">
+        <div id={listId} role="listbox" aria-label={label} className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded border bg-white shadow-lg">
           {options.map((o) => (
             <div
               key={o.value}
@@ -48,7 +52,7 @@ export default function Select({ options, value, onChange, placeholder }: { opti
               }}
             >
               <span>{o.label}</span>
-              {o.hint && <span className="text-xs text-slate-400">{o.hint}</span>}
+              {o.hint && <span className="text-xs text-slate-500">{o.hint}</span>}
             </div>
           ))}
         </div>

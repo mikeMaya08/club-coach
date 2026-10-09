@@ -61,7 +61,7 @@ export default function NotificationBell() {
               >
                 <div>
                   <p>{n.message}</p>
-                  <p className="text-xs text-slate-400">{format(parseISO(n.createdAt), 'MMM d, HH:mm')}</p>
+                  <p className="text-xs text-slate-500">{format(parseISO(n.createdAt), 'MMM d, HH:mm')}</p>
                 </div>
                 {!n.read && (
                   <button

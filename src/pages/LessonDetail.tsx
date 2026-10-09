@@ -20,6 +20,7 @@ export default function LessonDetail() {
     return {
       lesson,
       court: s.courts.find((c) => c.id === lesson?.courtId)?.name,
+      waiting: (lesson?.waitlist ?? []).map((wid) => s.users.find((u) => u.id === wid)?.name ?? wid),
       students: (lesson?.studentIds ?? []).map((sid) => s.users.find((u) => u.id === sid)).filter((u) => !!u),
       // booked reservations that a no-show would also flip, per student
       matching: Object.fromEntries(
@@ -67,7 +68,7 @@ export default function LessonDetail() {
         <p className="mt-2 text-sm">Enrolled: {lesson.studentIds.length} of {lesson.capacity}</p>
 
         <h3 className="mb-2 mt-4 text-sm font-semibold uppercase text-slate-500">Students</h3>
-        {data.students.length === 0 && <p className="text-sm text-slate-400">No students enrolled yet.</p>}
+        {data.students.length === 0 && <p className="text-sm text-slate-500">No students enrolled yet.</p>}
         <ul className="divide-y">
           {data.students.map((u) => {
             const att = lesson.attendance[u!.id]
@@ -78,7 +79,7 @@ export default function LessonDetail() {
                   <div className="text-xs text-slate-500">Level {u!.level}</div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={pill(att === 'present', 'border-green-600 bg-green-600 text-white')} role="button" tabIndex={0} aria-pressed={att === 'present'} onClick={() => mark(u!.id, 'present')}>Present</span>
+                  <span className={pill(att === 'present', 'border-green-700 bg-green-700 text-white')} role="button" tabIndex={0} aria-pressed={att === 'present'} onClick={() => mark(u!.id, 'present')}>Present</span>
                   <span className={pill(att === 'no-show', 'border-red-600 bg-red-600 text-white')} role="button" tabIndex={0} aria-pressed={att === 'no-show'} onClick={() => mark(u!.id, 'no-show')}>No-show</span>
                   <Link to={`/notes?student=${u!.id}&lesson=${lesson.id}`} className="text-xs text-indigo-700 underline">Note</Link>
                 </div>
@@ -86,6 +87,16 @@ export default function LessonDetail() {
             )
           })}
         </ul>
+
+        {data.waiting.length > 0 && (
+          <>
+            <h3 className="mb-2 mt-4 text-sm font-semibold uppercase text-slate-500">Waitlist ({data.waiting.length})</h3>
+            <ol className="list-decimal pl-5 text-sm">
+              {data.waiting.map((name, i) => <li key={i}>{name}</li>)}
+            </ol>
+            <p className="mt-1 text-xs text-slate-500">The first player is enrolled automatically when a seat opens up.</p>
+          </>
+        )}
 
         {lesson.status === 'scheduled' && (
           <div className="mt-5 flex gap-2 border-t pt-4">
