@@ -4,10 +4,12 @@ import { useClub } from 'club-store'
 import Rating from '../components/Rating'
 import { useMe } from '../lib/useMe'
 
+/** Players who attended at least one of the coach's lessons, with how often and their latest rating. */
 export default function Students() {
   const me = useMe()
   const rows = useClub((s) => {
     const mine = s.lessons.filter((l) => l.coachId === me.id)
+    // "Attended" means the coach marked them present; no-shows and unmarked students do not count.
     const ids = new Set(mine.flatMap((l) => l.studentIds.filter((id) => l.attendance[id] === 'present')))
     return s.users
       .filter((u) => ids.has(u.id))
