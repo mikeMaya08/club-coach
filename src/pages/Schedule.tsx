@@ -18,6 +18,7 @@ function LessonLink({ l, courts, compact }: { l: Lesson; courts: Record<string, 
   )
 }
 
+/** The coach's lessons as a week agenda or a month calendar. The month view starts on Monday and shows lessons only. */
 export default function Schedule() {
   const me = useMe()
   const [view, setView] = useState<'week' | 'month'>('week')
