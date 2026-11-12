@@ -1,6 +1,7 @@
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { login, useClub, useSession } from 'club-store'
 
+/** Fake login: pick one of the coaches. A deactivated coach is sent back here with a message by the guard. */
 export default function Login() {
   const { status } = useSession('coach')
   const location = useLocation()

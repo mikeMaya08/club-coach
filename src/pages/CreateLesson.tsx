@@ -5,6 +5,7 @@ import Select from '../components/Select'
 import { useMe } from '../lib/useMe'
 import { useRun } from '../lib/useRun'
 
+/** Form to create a lesson, with live conflict checks and reusable templates. */
 export default function CreateLesson() {
   const me = useMe()
   const navigate = useNavigate()
@@ -18,6 +19,7 @@ export default function CreateLesson() {
   const [templateName, setTemplateName] = useState('')
   const templates = useClub((s) => s.lessonTemplates.filter((x) => x.coachId === me.id))
 
+  // A template pre-fills the form; the court is only set when the template has one, and the date is never touched.
   const applyTemplate = (id: string) => {
     const tpl = templates.find((x) => x.id === id)
     if (!tpl) return
@@ -36,7 +38,8 @@ export default function CreateLesson() {
     if (result.ok) setTemplateName('')
   }
 
-  // Live check while the form is being filled in.
+  // Live check while the form is being filled in. It mirrors the store's rules (hours, lights, court status,
+  // conflicts) to explain a problem before submitting; the store still enforces them when the lesson is created.
   const check = useClub((s) => {
     const court = s.courts.find((c) => c.id === courtId)
     const problems: string[] = []

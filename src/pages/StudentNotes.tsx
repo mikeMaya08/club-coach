@@ -42,6 +42,10 @@ function Editor({ editorRef, onInput }: { editorRef: React.RefObject<HTMLDivElem
   )
 }
 
+/**
+ * Write a note about a student: rich text plus a 1-5 rating. Opened from a lesson, the `student` and
+ * `lesson` query params preselect the student and link the note to that lesson.
+ */
 export default function StudentNotes() {
   const me = useMe()
   const toast = useToast()
@@ -51,6 +55,7 @@ export default function StudentNotes() {
   const [studentId, setStudentId] = useState(params.get('student') ?? '')
   const [rating, setRating] = useState(0)
   const editor = useRef<HTMLDivElement>(null)
+  // The editor is uncontrolled (contentEditable); `empty` only tracks whether it has text, to enable Save.
   const [empty, setEmpty] = useState(true)
 
   const data = useClub((s) => ({

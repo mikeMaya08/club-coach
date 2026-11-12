@@ -12,6 +12,7 @@ export default function Select({ options, value, onChange, placeholder, label }:
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const listId = useId()
+  // `label` names the control for screen readers; `placeholder` is only the visible text when nothing is chosen.
   const current = options.find((o) => o.value === value)
 
   useEffect(() => {
