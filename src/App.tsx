@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import DebugPanel from './components/DebugPanel'
 import Guard from './components/Guard'
 import Layout from './components/Layout'
+import Activity from './pages/Activity'
 import CreateLesson from './pages/CreateLesson'
 import LessonDetail from './pages/LessonDetail'
 import Login from './pages/Login'
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="lessons/:id" element={<LessonDetail />} />
             <Route path="notes" element={<StudentNotes />} />
             <Route path="students" element={<Students />} />
+            <Route path="activity" element={<Activity />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
