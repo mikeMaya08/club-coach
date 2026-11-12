@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { logout, useClub } from 'club-store'
 import { useMe } from '../lib/useMe'
+import Announcements from './Announcements'
 import PendingBar from './PendingBar'
 import NotificationBell from './NotificationBell'
 import ThemeToggle from './ThemeToggle'
@@ -85,6 +86,7 @@ export default function Layout() {
         </nav>
       </header>
       <main id="main" tabIndex={-1} className="mx-auto max-w-5xl px-4 py-5 outline-none">
+        <Announcements />
         <Outlet context={me} />
       </main>
     </div>
